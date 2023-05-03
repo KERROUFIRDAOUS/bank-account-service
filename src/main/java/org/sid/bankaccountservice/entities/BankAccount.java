@@ -1,25 +1,27 @@
 package org.sid.bankaccountservice.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.sid.bankaccountservice.enums.AccountType;
+import org.sid.bankaccountservice.enums.AccountStatus;
 
 import java.util.Date;
-
+import java.util.List;
 @Entity
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class BankAccount {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TYPE",length = 4)
+@Data @NoArgsConstructor @AllArgsConstructor
+public abstract class BankAccount {
     @Id
     private String id;
-    private Date createdAt;
     private double balance;
-    private String currency;
+    private Date createdAt;
     @Enumerated(EnumType.STRING)
-    private AccountType accountType;
+    private AccountStatus status;
+    @ManyToOne
+    private Customer customer;
+    @OneToMany(mappedBy = "bankAccount",fetch = FetchType.LAZY)
+    private List<AccountOperation> accountOperations;
 }

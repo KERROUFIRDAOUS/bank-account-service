@@ -1,7 +1,7 @@
 package org.sid.bankaccountservice;
 
 import org.sid.bankaccountservice.entities.BankAccount;
-import org.sid.bankaccountservice.enums.AccountType;
+import org.sid.bankaccountservice.enums.AccountStatus;
 import org.sid.bankaccountservice.repositories.BankAccountRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,19 +18,4 @@ public class BankAccountServiceApplication {
 		SpringApplication.run(BankAccountServiceApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner start(BankAccountRepository bankAccountRepository){
-		return args -> {
-			for(int i=0; i<10 ; i++){
-				BankAccount bankAccount=BankAccount.builder()
-						.id(UUID.randomUUID().toString())
-						.accountType(Math.random()>8.5? AccountType.CURRENT_ACCOUNT:AccountType.SAVING_ACCOUNT)
-						.balance(10000+Math.random()+90000)
-						.createdAt(new Date())
-						.currency("MAD")
-						.build();
-				bankAccountRepository.save(bankAccount);
-			}
-		};
-	}
 }
